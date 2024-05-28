@@ -1,0 +1,37 @@
+* {
+  font-family: 'Roboto';
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #2F9E41;
+}
+
+.text-green {
+  color: #2F9E41;
+  /* Verde */
+}
+
+
+.form-container{
+  background-color: rgba(255, 255, 255, 0.9);
+  max-width: 400px;
+  padding: 1rem;
+}
+
+.form-container-cadastro{
+  background-color: rgba(255, 255, 255, 0.9);
+  max-width: 700px;
+  padding: 1rem;
+}
+
+.btn-success1{
+  background-color: rgb(47, 158, 65);
+}
