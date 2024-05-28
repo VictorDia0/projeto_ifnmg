@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Validator;
 
 class MealController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         $meal = Meal::all();
@@ -37,9 +35,6 @@ class MealController extends Controller
         return response()->json(['message' => 'Meal created successfully', 'meal' => $meal], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $meal = Meal::find($id);
@@ -51,15 +46,6 @@ class MealController extends Controller
         return response()->json($meal);
     }
 
-
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $meal = Meal::find($id);

@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Validator;
 
 class MealBookingsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         $meal_bookings = MealBookings::all();
@@ -38,9 +36,6 @@ class MealBookingsController extends Controller
         return response()->json(['message' => 'Meal Bookings created successfully', 'meal_bookings' => $meal_bookings], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $meal_bookings = MealBookings::find($id);
@@ -51,27 +46,39 @@ class MealBookingsController extends Controller
         return response()->json($meal_bookings);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        $meal_bookings = MealBookings::find($id);
+
+        if($meal_bookings){
+            return response() ->json(['message' => 'Meal Bookings not found'], 404);
+        }
+
+        $validator = Validator::make($request -> all(), [
+            'user_id' => 'required|exists:users,id',
+            'meal_id' => 'required|exists:meals,id',
+            'meal_date' =>  'required|date'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $meal_bookings->fill($request->all());
+        $meal_bookings->save();
+
+        return response()->json(['message' => 'Meal Bookings updated successfully', 'meal' => $meal_bookings]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(string $id)
     {
-        //
+        $meal_bookings = MealBookings::find($id);
+        if(!$meal_bookings){
+            return response()->json(['message' => 'Meal Bookings not found'], 404);
+        }
+
+        $meal_bookings->delete();
+        return response()->json(['message' => 'Meal Bookings deleted successfully']);
     }
 }
