@@ -45,6 +45,7 @@ class UserController extends Controller
             'user' => $request->user,
             'password' => Hash::make($request->password),
             'role' => $request->role,
+            'course' => $request->course,
         ]);
 
         return response()->json(['message' => 'User created successfully', 'user' => $user], 201);
@@ -80,6 +81,7 @@ class UserController extends Controller
             'user' => 'sometimes|string|unique:users,user,' . $user->id,
             'password' => 'sometimes|string|min:6',
             'role' => 'sometimes|in:ADM,ALN,NTC,ASS,EMP',
+            'course' => 'sometimes|string|min:6',
         ]);
 
         if ($validator->fails()) {
@@ -87,6 +89,7 @@ class UserController extends Controller
         }
 
         $user->fill($request->all());
+        
         if ($request->has('password')) {
             $user->password = Hash::make($request->password);
         }
