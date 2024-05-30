@@ -89,7 +89,7 @@ class UserController extends Controller
         }
 
         $user->fill($request->all());
-        
+
         if ($request->has('password')) {
             $user->password = Hash::make($request->password);
         }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MealBookingsController;
 use App\Http\Controllers\MealController;
 use App\Http\Controllers\UserController;
@@ -29,3 +30,7 @@ Route::group(['prefix' => 'meal'], function(){
     Route::put('/{id}', [MealController::class, 'update']);
     Route::delete('/{id}', [MealController::class, 'destroy']);
 });
+
+
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout']);
