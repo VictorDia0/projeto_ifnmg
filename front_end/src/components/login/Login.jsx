@@ -1,4 +1,5 @@
 import { FaUser, FaLock } from "react-icons/fa";
+import { useState } from "react";
 import axios from "axios";
 
 import "./login.css";
@@ -7,6 +8,25 @@ const backendUrl = 'http://127.0.0.1:8000/api';
 
 
 const Login = () => {
+    const [error, setError] = useState('');
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            const user = event.target.user.value;
+            const password = event.target.password.value;
+
+            const response = await axios.post(`${backendUrl}/login`, { user, password });
+
+            if (response.data.role === 'ADM') {
+                window.location.href = 'http://127.0.0.1:8000/api/users';
+            }
+
+        } catch (error) {
+            setError('Invalid credentials');
+            console.error(error);
+        }
+    }
 
     return (
         <div className="container">
@@ -28,7 +48,8 @@ const Login = () => {
                     <label> Permanecer Conectado</label>
                 </div>
                 <button type="submit">Entrar</button>
-                
+
+                {error && <p style={{ color: 'red' }}>{error}</p>}
                 <hr />
                 <div className="final">
                     <p>© 2024 Gabriel de Sousa e Victor Dias</p>
@@ -39,24 +60,3 @@ const Login = () => {
 };
 
 export default Login;
-
-
-
-function handleSubmit(event) {
-    event.preventDefault();
-    try {
-        const user = event.target.user.value;
-        const password = event.target.password.value;
-
-        axios.post(`${backendUrl}/login`, { user, password })
-            .then(response => {
-                console.log('Dados enviados com sucesso');
-                if (response.data.role === 'ADM') {
-                    window.location.href = 'http://127.0.0.1:8000/api/users';
-                }
-            })
-            
-    } catch (error) {
-        console.log(error);
-    }
-}
