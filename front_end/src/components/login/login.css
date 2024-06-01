@@ -1,82 +1,90 @@
-body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-  background: url('path-to-your-background-image.jpg') no-repeat center center fixed; 
-  background-size: cover;
+/* Geral e Estrutura */
+.container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-}
-
-.container {
-  background: rgba(255, 255, 255, 0.9);
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 900px;
-  width: 100%;
-  text-align: center;
+  background-color: #f0f2f5;
 }
 
 form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  padding: 20px;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  width: 300px;
 }
 
+hr {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+
+/* Cabeçalho do formulário */
+img {
+  display: block;
+  margin: 0 auto;
+}
+
+/* Campos de entrada */
 .input-field {
   position: relative;
-  width: 100%;
   margin-bottom: 20px;
 }
 
 .input-field .icon {
   position: absolute;
-  top: 50%;
   left: 10px;
+  top: 50%;
   transform: translateY(-50%);
   color: #888;
 }
 
-.input-field input {
+input[type="text"],
+input[type="password"] {
   width: 100%;
-  padding: 10px 10px 10px 30px;
-  border: 1px solid #ddd;
+  padding: 10px 10px 10px 40px;
+  border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 16px;
 }
 
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: #0056b3;
+  outline: none;
+}
+
+/* Botão de envio */
 button {
-  padding: 10px 20px;
-  background-color: #4CAF50;
+  width: 100%;
+  padding: 10px;
+  background-color: #0056b3;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 16px;
+  transition: background-color 0.3s;
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #003580;
 }
 
-img {
+/* Checkbox */
+div {
   margin-bottom: 20px;
 }
 
-p {
-  margin: 10px 0;
+label {
+  margin-left: 5px;
 }
 
-hr {
-  width: 100%;
-  border: 0.5px solid #ddd;
-  margin: 20px 0;
-}
-
-.final {
-  margin-top: 20px;
+/* Rodapé do formulário */
+.final p {
+  text-align: center;
+  color: #666;
+  font-size: 12px;
 }
