@@ -20,6 +20,8 @@ const Login = () => {
 
             if (response.data.role === 'ADM') {
                 window.location.href = 'http://127.0.0.1:8000/api/users';
+            } else if(response.data.role === 'NTC'){
+                window.location.href = 'http://127.0.0.1:8000/api/meal';
             }
 
         } catch (error) {
