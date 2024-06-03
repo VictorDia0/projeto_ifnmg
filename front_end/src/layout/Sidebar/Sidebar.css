@@ -41,6 +41,23 @@
         border-radius: 18px;
     }
 }
+
+.sidebar.collapsed {
+    width: 120px; 
+  }
+  .sidebar.collapsed .info-name{
+      display: none;
+  }
+  
+  
+  .sidebar.collapsed .nav-link-text {
+    display: none;
+  }
+  
+  
+  .sidebar.collapsed .nav-link {
+    justify-content: center; 
+  }
 .sidebar-change{
     margin-left: -260px;
 }

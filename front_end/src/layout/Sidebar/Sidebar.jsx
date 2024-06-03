@@ -6,15 +6,14 @@ import { SidebarContext } from "../../context/sidebarContext"
 import { FaUsersGear, FaMoneyCheckDollar, FaGear, FaHouse, FaArrowRightFromBracket, FaAddressCard } from "react-icons/fa6";
 
 const Sidebar = () => {
-  // const [activeLinkIdx] = useState(1);
-  const [sidebarClass, setSidebarClass] = useState("")
+  const [sidebarClass, setSidebarClass] = useState("");
   const { isSidebarOpen } = useContext(SidebarContext);
 
   useEffect(() => {
     if (isSidebarOpen) {
-      setSidebarClass('sidebar-change')
+      setSidebarClass("sidebar-change");
     } else {
-      setSidebarClass('');
+      setSidebarClass('collapsed');
     }
   }, [isSidebarOpen]);
 
