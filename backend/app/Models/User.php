@@ -49,4 +49,13 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function mealRequests(): HasMany
+    {
+        return $this->hasMany(MealRequest::class);
+    }
+
+    public function mealBookings(): HasMany
+    {
+        return $this->hasMany(MealBooking::class);
+    }
 }

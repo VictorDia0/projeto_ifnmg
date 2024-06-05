@@ -5,7 +5,7 @@ use App\Http\Controllers\MealBookingsController;
 use App\Http\Controllers\MealController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\MealRequestController;
 
 Route::group(['prefix' => 'users'], function(){
     Route::get('/', [UserController::class,'index']);
@@ -29,6 +29,14 @@ Route::group(['prefix' => 'meal'], function(){
     Route::get('/{id}', [MealController::class,'show']);
     Route::put('/{id}', [MealController::class, 'update']);
     Route::delete('/{id}', [MealController::class, 'destroy']);
+});
+
+Route::group(['prefix' => 'mealrequests'], function(){
+    Route::get('/', [MealRequestController::class, 'index']);
+    Route::post('/', [MealRequestController::class, 'store']);
+    Route::get('/{id}', [MealRequestController::class, 'show']);
+    Route::put('/{id}', [MealRequestController::class, 'update']);
+    Route::delete('/{id}', [MealRequestController::class, 'destroy']);
 });
 
 
