@@ -1,17 +1,11 @@
 
 import "./App.css";
-import Content from "./layout/Content/Content";
-import Sidebar from "./layout/Sidebar/Sidebar";
+import Login from "./components/login/Login";
 
 
 function App() {
   return (
-    <>
-      <div className="app">
-        <Sidebar/>
-        <Content/>
-      </div>
-    </>
+    <Login />
   );
 }
 
