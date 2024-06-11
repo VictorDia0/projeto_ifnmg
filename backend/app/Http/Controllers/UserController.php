@@ -34,7 +34,7 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json($validator->errors()->toJson(), 422);
         }
 
         $user = User::create([
@@ -43,7 +43,7 @@ class UserController extends Controller
             'phone_number' => $request->phone_number,
             'email' => $request->email,
             'user' => $request->user,
-            'password' => Hash::make($request->password),
+            'password' => bcrypt($request->password),
             'role' => $request->role,
             'course' => $request->course,
         ]);

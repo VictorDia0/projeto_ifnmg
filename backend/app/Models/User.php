@@ -6,8 +6,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\MealBookings;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
@@ -49,6 +52,7 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    
     public function mealRequests(): HasMany
     {
         return $this->hasMany(MealRequest::class);
@@ -56,6 +60,21 @@ class User extends Authenticatable
 
     public function mealBookings(): HasMany
     {
-        return $this->hasMany(MealBooking::class);
+        return $this->hasMany(MealBookings::class);
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array
+     */
+
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }

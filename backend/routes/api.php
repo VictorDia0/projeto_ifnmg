@@ -7,31 +7,31 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MealRequestController;
 
-Route::group(['prefix' => 'users'], function(){
-    Route::get('/', [UserController::class,'index']);
-    Route::post('/', [UserController::class,'store']);
-    Route::get('/{id}', [UserController::class,'show']);
+Route::group(['prefix' => 'users'], function () {
+    Route::get('/', [UserController::class, 'index']);
+    Route::post('/', [UserController::class, 'store']);
+    Route::get('/{id}', [UserController::class, 'show']);
     Route::put('/{id}', [UserController::class, 'update']);
     Route::delete('/{id}', [UserController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'mealbookings'], function(){
-    Route::get('/', [MealBookingsController::class,'index']);
-    Route::post('/', [MealBookingsController::class,'store']);
-    Route::get('/{id}', [MealBookingsController::class,'show']);
+Route::group(['prefix' => 'mealbookings'], function () {
+    Route::get('/', [MealBookingsController::class, 'index']);
+    Route::post('/', [MealBookingsController::class, 'store']);
+    Route::get('/{id}', [MealBookingsController::class, 'show']);
     Route::put('/{id}', [MealBookingsController::class, 'update']);
     Route::delete('/{id}', [MealBookingsController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'meal'], function(){
-    Route::get('/', [MealController::class,'index']);
-    Route::post('/', [MealController::class,'store']);
-    Route::get('/{id}', [MealController::class,'show']);
+Route::group(['prefix' => 'meal'], function () {
+    Route::get('/', [MealController::class, 'index']);
+    Route::post('/', [MealController::class, 'store']);
+    Route::get('/{id}', [MealController::class, 'show']);
     Route::put('/{id}', [MealController::class, 'update']);
     Route::delete('/{id}', [MealController::class, 'destroy']);
 });
 
-Route::group(['prefix' => 'mealrequests'], function(){
+Route::group(['prefix' => 'mealrequests'], function () {
     Route::get('/', [MealRequestController::class, 'index']);
     Route::post('/', [MealRequestController::class, 'store']);
     Route::get('/{id}', [MealRequestController::class, 'show']);
@@ -39,6 +39,9 @@ Route::group(['prefix' => 'mealrequests'], function(){
     Route::delete('/{id}', [MealRequestController::class, 'destroy']);
 });
 
-
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout']);
+Route::group(['middleware' => 'api','prefix' => 'auth'], function ($router) {
+    Route::post('/login', [AuthController::class, 'login'])->name('login');
+    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:api')->name('logout');
+    Route::post('/refresh', [AuthController::class, 'refresh'])->middleware('auth:api')->name('refresh');
+    Route::post('/me', [AuthController::class, 'me'])->middleware('auth:api')->name('me');
+});
