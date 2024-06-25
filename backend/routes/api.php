@@ -11,7 +11,7 @@ use App\Http\Controllers\MealRequestController;
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 
-Route::group(['middleware' => ['auth:sanctum']],  function () {
+//Route::group(['middleware' => ['auth:sanctum']],  function () {
 
     Route::group(['prefix' => 'users'], function () {
         Route::get('/', [UserController::class, 'index']);
@@ -48,4 +48,4 @@ Route::group(['middleware' => ['auth:sanctum']],  function () {
     Route::post('/logout/{id}', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/me', [AuthController::class, 'me']);
-});
+//});
