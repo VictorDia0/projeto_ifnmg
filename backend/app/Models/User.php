@@ -9,10 +9,11 @@ use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\MealBookings;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens,HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -52,7 +53,7 @@ class User extends Authenticatable implements JWTSubject
             'password' => 'hashed',
         ];
     }
-    
+
     public function mealRequests(): HasMany
     {
         return $this->hasMany(MealRequest::class);

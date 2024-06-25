@@ -6,29 +6,35 @@ import "./login.css";
 
 const backendUrl = 'http://127.0.0.1:8000/api';
 
-
 const Login = () => {
+    const [user, setUser] = useState("");
+    const [password, setPassword] = useState("");
     const [error, setError] = useState('');
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const user = event.target.user.value;
-            const password = event.target.password.value;
-
             const response = await axios.post(`${backendUrl}/login`, { user, password });
+            const token = response.data.token;
+            const role = response.data.role;
 
-            if (response.data.role === 'ADM') {
+            localStorage.setItem('token', token);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+
+            if (role === 'ADM') {
                 window.location.href = 'http://127.0.0.1:8000/api/users';
-            } else if(response.data.role === 'NTC'){
-                window.location.href = 'http://127.0.0.1:8000/api/meal';
+            } else if (role === 'NTC') {
+                window.location.href = '/user-dashboard';
+            } else {
+                setError('Unauthorized role');
             }
 
         } catch (error) {
             setError('Invalid credentials');
             console.error(error);
         }
-    }
+    };
 
     return (
         <div className="container">
@@ -39,11 +45,11 @@ const Login = () => {
 
                 <div className="input-field">
                     <FaUser className="icon" />
-                    <input type="text" name='user' placeholder="Digite seu usuario" />
-                </div >
+                    <input type="text" name='user' placeholder="Digite seu usuario" value={user} onChange={(e) => setUser(e.target.value)}/>
+                </div>
                 <div className="input-field">
                     <FaLock className="icon" />
-                    <input type="password" name='password' placeholder="Senha" />
+                    <input type="password" name='password' placeholder="Senha" value={password} onChange={(e) => setPassword(e.target.value)}/>
                 </div>
                 <div>
                     <input type="checkbox" />
@@ -62,3 +68,5 @@ const Login = () => {
 };
 
 export default Login;
+
+
