@@ -7,11 +7,11 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MealRequestController;
 
-
+// Rota de login sem middleware de autenticação
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-
-//Route::group(['middleware' => ['auth:sanctum']],  function () {
+// // Rotas protegidas por autenticação Sanctum e com CORS configurado
+// Route::group(['middleware' => ['auth:sanctum', 'cors']], function () {
 
     Route::group(['prefix' => 'users'], function () {
         Route::get('/', [UserController::class, 'index']);
@@ -48,4 +48,4 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/logout/{id}', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/me', [AuthController::class, 'me']);
-//});
+// });

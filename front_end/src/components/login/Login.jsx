@@ -21,9 +21,8 @@ const Login = () => {
             localStorage.setItem('token', token);
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-
             if (role === 'ADM') {
-                window.location.href = 'http://127.0.0.1:8000/api/users';
+                window.location.href = '/admin-dashboard';
             } else if (role === 'NTC') {
                 window.location.href = '/user-dashboard';
             } else {
@@ -45,11 +44,11 @@ const Login = () => {
 
                 <div className="input-field">
                     <FaUser className="icon" />
-                    <input type="text" name='user' placeholder="Digite seu usuario" value={user} onChange={(e) => setUser(e.target.value)}/>
+                    <input type="text" name='user' placeholder="Digite seu usuario" value={user} onChange={(e) => setUser(e.target.value)} />
                 </div>
                 <div className="input-field">
                     <FaLock className="icon" />
-                    <input type="password" name='password' placeholder="Senha" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                    <input type="password" name='password' placeholder="Senha" value={password} onChange={(e) => setPassword(e.target.value)} />
                 </div>
                 <div>
                     <input type="checkbox" />
@@ -68,5 +67,3 @@ const Login = () => {
 };
 
 export default Login;
-
-

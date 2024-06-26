@@ -25,7 +25,8 @@ class AuthController extends Controller
             return response()->json([
                 'message' => 'Login successful',
                 'role' => $user->role,
-                'url' => 'http://127.0.0.1:8000/api/users',
+                'name' => $user->name,
+                // 'url' => 'http://127.0.0.1:8000/api/users',
                 'token' => $token,
                 'token_type' => 'bearer',
                 'expires_in' => Auth::factory()->getTTL() * 60
