@@ -40,6 +40,34 @@ class MealRequestController extends Controller
         return response()->json($mealRequest, 201);
     }
 
+
+    //Cofirmação pelo aluno da refeição - Bolsista
+
+    public function confirm($id)
+    {
+        $mealRequest = MealRequest::find($id);
+
+        if (is_null($mealRequest)) {
+            return response()->json(['message' => 'Meal request not found'], 404);
+        }
+
+        // Verificar se a hora atual é antes do prazo de confirmação (ex.: até as 11h do dia anterior)
+        $confirmationDeadline = Carbon::now()->subDay()->hour(11)->minute(0)->second(0);
+        $currentTime = Carbon::now();
+
+        if ($currentTime->lte($confirmationDeadline)) {
+            // Atualizar o status da solicitação para "confirmado"
+            $mealRequest->status = 'confirmed';
+            $mealRequest->save();
+
+            return response()->json(['message' => 'Meal request confirmed successfully']);
+        } else {
+            return response()->json(['message' => 'Confirmation deadline has passed'], 400);
+        }
+    }
+
+
+
     /**
      * Display the specified meal request.
      */
