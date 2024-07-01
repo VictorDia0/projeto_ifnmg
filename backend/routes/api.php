@@ -11,7 +11,7 @@ use App\Http\Controllers\MealRequestController;
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 // // Rotas protegidas por autenticação Sanctum e com CORS configurado
-Route::group(['middleware' => ['auth:sanctum', 'cors']], function () {
+// Route::group(['middleware' => ['auth:sanctum', 'cors']], function () {
 
     Route::group(['prefix' => 'users'], function () {
         Route::get('/', [UserController::class, 'index']);
@@ -35,10 +35,13 @@ Route::group(['middleware' => ['auth:sanctum', 'cors']], function () {
         Route::get('/{id}', [MealController::class, 'show']);
         Route::put('/{id}', [MealController::class, 'update']);
         Route::delete('/{id}', [MealController::class, 'destroy']);
+        Route::get('/today', [MealController::class, 'getTodayMeal']);
+        Route::get('/tomorrow', [MealController::class, 'getTomorrowMeal']);
+
     });
 
     Route::group(['prefix' => 'mealrequests'], function () {
-        // Route::post('/', [MealRequestController::class, 'confirm']);
+        Route::post('/{id}', [MealRequestController::class, 'confirm']);
         Route::get('/', [MealRequestController::class, 'index']);
         Route::post('/', [MealRequestController::class, 'store']);
         Route::get('/{id}', [MealRequestController::class, 'show']);
@@ -49,4 +52,4 @@ Route::group(['middleware' => ['auth:sanctum', 'cors']], function () {
     Route::post('/logout/{id}', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/me', [AuthController::class, 'me']);
- });
+//  });
