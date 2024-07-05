@@ -1,7 +1,8 @@
+// src/components/login/Login.js
+import  { useState } from "react";
+import { useHistory } from "react-router-dom";
 import { FaUser, FaLock } from "react-icons/fa";
-import { useState } from "react";
 import axios from "axios";
-
 import "./login.css";
 
 const backendUrl = 'http://127.0.0.1:8000/api';
@@ -10,25 +11,24 @@ const Login = () => {
     const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState('');
+    const history = useHistory();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
             const response = await axios.post(`${backendUrl}/login`, { user, password });
-            const token = response.data.token;
-            const role = response.data.role;
+            const { token, role } = response.data;
 
             localStorage.setItem('token', token);
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
             if (role === 'ADM') {
-                window.location.href = '/admin-dashboard';
-            } else if (role === 'ALN') {
-                window.location.href = '/user-dashboard';
+                history.push('/admin-dashboard');
+            } else if (role === 'NTC') {
+                history.push('/user-dashboard');
             } else {
-                setError('Usuário sem permissão');
+                setError('Unauthorized role');
             }
-
         } catch (error) {
             setError('Invalid credentials');
             console.error(error);
@@ -44,11 +44,23 @@ const Login = () => {
 
                 <div className="input-field">
                     <FaUser className="icon" />
-                    <input type="text" name='user' placeholder="Digite seu usuario" value={user} onChange={(e) => setUser(e.target.value)} />
+                    <input
+                        type="text"
+                        name="user"
+                        placeholder="Digite seu usuario"
+                        value={user}
+                        onChange={(e) => setUser(e.target.value)}
+                    />
                 </div>
                 <div className="input-field">
                     <FaLock className="icon" />
-                    <input type="password" name='password' placeholder="Senha" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Senha"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
                 </div>
                 <div>
                     <input type="checkbox" />
