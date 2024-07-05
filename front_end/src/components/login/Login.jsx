@@ -23,10 +23,10 @@ const Login = () => {
 
             if (role === 'ADM') {
                 window.location.href = '/admin-dashboard';
-            } else if (role === 'NTC') {
+            } else if (role === 'ALN') {
                 window.location.href = '/user-dashboard';
             } else {
-                setError('Unauthorized role');
+                setError('Usuário sem permissão');
             }
 
         } catch (error) {
