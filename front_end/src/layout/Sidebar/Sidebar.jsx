@@ -11,9 +11,9 @@ const Sidebar = () => {
 
   useEffect(() => {
     if (isSidebarOpen) {
-      setSidebarClass("sidebar-change");
+      setSidebarClass("collapsed ");
     } else {
-      setSidebarClass('collapsed');
+      setSidebarClass(' ');
     }
   }, [isSidebarOpen]);
 
