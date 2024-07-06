@@ -25,13 +25,11 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'cpf' => 'required|string|unique:users,cpf',
-            'phone_number' => 'required|string',
-            'email' => 'required|string|email|max:191|unique:users,email',
             'user' => 'required|string|unique:users,user',
             'password' => 'required|string|min:6',
             'role' => 'required|in:ADM,ALN,NTC,ASS,EMP',
-            'bolsista' => 'sometimes|boolean', // validação para bolsista
+            //'bolsista' => 'sometimes|boolean',
+            //'atualizar' => false // validação para bolsista
         ]);
 
         if ($validator->fails()) {
@@ -40,14 +38,10 @@ class UserController extends Controller
 
         $user = User::create([
             'name' => $request->name,
-            'cpf' => $request->cpf,
-            'phone_number' => $request->phone_number,
-            'email' => $request->email,
             'user' => $request->user,
             'password' => bcrypt($request->password),
             'role' => $request->role,
-            // 'course' => $request->course,
-            'bolsista' => $request->bolsista ?? false, // atribuir bolsista se presente, caso contrário, padrão para false
+            //'bolsista' => $request->bolsista ?? false, // atribuir bolsista se presente, caso contrário, padrão para false
         ]);
 
         return response()->json(['message' => 'User created successfully', 'user' => $user], 201);

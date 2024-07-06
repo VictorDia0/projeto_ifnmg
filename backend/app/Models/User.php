@@ -21,7 +21,8 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'cpf', 'phone_number', 'email', 'user', 'password', 'role', 'course', 'bolsista'
+        'name', 'cpf', 'phone_number', 'email', 'user', 'password', 'role', 'course', 'bolsista',
+        'first_login',
     ];
 
 
@@ -45,6 +46,7 @@ class User extends Authenticatable implements JWTSubject
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'first_login' => 'boolean',
         ];
     }
 

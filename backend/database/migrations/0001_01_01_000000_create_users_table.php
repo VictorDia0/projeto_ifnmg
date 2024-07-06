@@ -14,14 +14,11 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->increments("id");
             $table->string('name', 255);
-            $table->string('cpf')->unique();
-            $table->string('phone_number');
-            $table->string('email', 191)->unique();
             $table->string('user')->unique()->nullable();
             $table->string('password');
             $table->enum('role', ['ADM', 'ALN', 'NTC', 'ASS', 'EMP']);
             $table->rememberToken();
-            $table->timestamps();
+            $table->timestamps();       
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
