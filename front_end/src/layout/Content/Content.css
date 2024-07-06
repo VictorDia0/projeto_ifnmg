@@ -1,8 +1,13 @@
 .main-content{
+    flex: 1;
+    margin-left: 280px;;
     background-color: var(--clr-secondary);
     flex: 1;
     padding: 32px;
 }
+.main-content.collapsed {
+    margin-left: 120px;
+  }
 @media screen and (max-width: 1400px){
     .main-content{
         padding-left: 20px;
