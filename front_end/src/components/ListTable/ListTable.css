@@ -11,7 +11,7 @@ table {
     background-color: #fff;
 }
 th, td {
-    padding: 12px 15px;
+    padding: 20px;
 }
 
 thead tr {
@@ -39,10 +39,12 @@ button{
     justify-content: space-between;
 }
 .search-bar button.add{
+    color: #fff;
     background-color: #009879;
-    padding: 10px;
+    padding: 15px;
 }
 .search-bar input{
+    width: 400px;
     background-color: #dddddd;
     padding: 15px 20px;
     border: none;
