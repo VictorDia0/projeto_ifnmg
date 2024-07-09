@@ -1,13 +1,10 @@
+import ListTable from '../../../components/ListTable/ListTable';
 import './Users.css';
 
 const Users = () => {
   return (
     <div>
-        Users 
-
-
-
-        Hellloooooo
+        <ListTable />
     </div>
   )
 }

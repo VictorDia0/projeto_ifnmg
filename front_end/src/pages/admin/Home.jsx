@@ -1,9 +1,9 @@
 import InfoCards from "../../components/InfoCards/InfoCards";
-import ListTable from "../../components/ListTable/ListTable";
+import ListMeals from "../../components/ListMeals/ListMeals";
 
 const Home = () => {
     return (
-        <><InfoCards /><hr></hr><ListTable /></>
+        <><InfoCards /><hr></hr><ListMeals /></>
     );
 };
 
