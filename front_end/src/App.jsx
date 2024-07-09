@@ -1,17 +1,14 @@
-import "./App.css";
-import Home from "./pages/admin/Home.jsx";
-/* import Content from "./layout/Content/Content";
-import Sidebar from "./layout/Sidebar/Sidebar"; */
+import Sidebar from "../src/layout/Sidebar/Sidebar";
+import Content from "../src/layout/Content/Content"
+import "./App.css"
 
-
-function App() {
-  return (
-    <>
-      <div className="app">
-        < Home />
-      </div>
-    </>
-  );
-}
+const App = () => {
+    return (
+        <div className="app">
+            <Sidebar />
+            <Content />
+        </div>
+    );
+};
 
 export default App;

@@ -1,8 +1,7 @@
 .main-content{
     flex: 1;
-    margin-left: 280px;;
+    margin-left: 260px;;
     background-color: var(--clr-secondary);
-    flex: 1;
     padding: 32px;
 }
 .main-content.collapsed {

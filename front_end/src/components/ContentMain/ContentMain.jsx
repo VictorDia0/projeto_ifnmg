@@ -1,14 +1,22 @@
 
+import { Routes,Route } from "react-router-dom";
 import "./ContentMain.css";
-import ListTable from "../ListTable/ListTable";
-import InfoCards from "../InfoCards/InfoCards"
+import Home from "../../pages/admin/Home";
+import Users from "../../pages/admin/Users/Users";
+import Meals from "../../pages/admin/Meals/Meals";
+import { Reports } from "../../pages/admin/Reports/Reports";
+import Settings from "../../pages/admin/Settings/Settings";
 
 export const ContentMain = () => {
   return (
     <div className="main-content-holder">
-      <InfoCards />
-      <hr></hr>
-      <ListTable />
+      <Routes>
+        <Route path="/home" element={<Home />}/>
+        <Route path="/Users" element={<Users />}/>
+        <Route path="/Meals" element={<Meals />}/>
+        <Route path="/Reports" element={<Reports />}/>
+        <Route path="/Settings" element={<Settings />}/>
+      </Routes>
     </div>
   );
 };

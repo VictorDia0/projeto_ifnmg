@@ -1,10 +1,9 @@
-import Cadastrar from "../../components/cadastrar/Cadastrar";
+import InfoCards from "../../components/InfoCards/InfoCards";
+import ListTable from "../../components/ListTable/ListTable";
 
 const Home = () => {
-
-
     return (
-        <Cadastrar />
+        <><InfoCards /><hr></hr><ListTable /></>
     );
 };
 

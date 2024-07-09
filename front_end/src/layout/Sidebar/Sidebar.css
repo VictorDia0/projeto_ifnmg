@@ -1,7 +1,7 @@
 .sidebar {
   position: fixed;
   background-color: var(--clr-primary);
-  width: 280px;
+  width: 260px;
   height: 100%;
   padding: 30px 20px;
   transition: width 0.3s ease var(--transition-default);
@@ -130,7 +130,7 @@ a:hover {
 
 .nav-link-text {
   color: var(--clr-grey);
-  font-size: 25px;
+  font-size: 1.3rem;
   text-transform: capitalize;
 }
 

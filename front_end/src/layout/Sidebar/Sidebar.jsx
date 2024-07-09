@@ -2,13 +2,14 @@ import "./Sidebar.css"
 
 import { useContext, useEffect, useState } from "react";
 import { SidebarContext } from "../../context/sidebarContext"
-
+import { Link }  from "react-router-dom";
 import { FaUsersGear, FaMoneyCheckDollar, FaGear, FaHouse, FaArrowRightFromBracket, FaAddressCard } from "react-icons/fa6";
 
 const Sidebar = () => {
   const [sidebarClass, setSidebarClass] = useState("");
   const { isSidebarOpen } = useContext(SidebarContext);
 
+  console.log("Sidebar->"+isSidebarOpen);
   useEffect(() => {
     if (isSidebarOpen) {
       setSidebarClass("collapsed ");
@@ -29,59 +30,59 @@ const Sidebar = () => {
       <nav className="navigation">
         <ul className="nav-list">
           <li className="nav-item" key="" >
-            <a to="/" className="nav-link active">
+            <Link to="/home" className="nav-link active">
               <FaHouse className="nav-link-icon" />
               <span className="nav-link-text">
                 Home
               </span>
-            </a>
+            </Link>
           </li>
           <li className="nav-item" key="" >
-            <a to="/Customers" className="nav-link">
+            <Link to="/Users" className="nav-link">
               <FaAddressCard className="nav-link-icon" />
               <span className="nav-link-text">
                 Alunos
               </span>
-            </a>
+            </Link>
           </li>
           <li className="nav-item" key="" >
-            <a to="/Budget" className="nav-link">
+            <Link to="/Meals" className="nav-link">
               <FaMoneyCheckDollar className="nav-link-icon" />
               <span className="nav-link-text">
                 Refeição
               </span>
-            </a>
+            </Link>
           </li>
           <li className="nav-item" key="" >
-            <a to="/Employee" className="nav-link">
+            <Link to="/Reports" className="nav-link">
               <FaUsersGear className="nav-link-icon" />
               <span className="nav-link-text">
                 Relatórios
               </span>
-            </a>
+            </Link>
 
           </li>
 
           <li className="nav-item" key="" >
 
-            <a to="/Settings" className="nav-link">
+            <Link to="/Settings" className="nav-link">
               <FaGear className="nav-link-icon" />
               <span className="nav-link-text">
                 Settings
               </span>
-            </a>
+            </Link>
 
           </li>
         </ul>
       </nav>
       <div className="logout">
         <li className="nav-item" key="" >
-          <a to="/" className="nav-link">
+          <Link to="/" className="nav-link">
             <FaArrowRightFromBracket className="nav-link-icon" />
             <span className="nav-link-text underline-none" id='text-underline-none'>
               logout
             </span>
-          </a>
+          </Link>
         </li>
       </div>
     </div>
