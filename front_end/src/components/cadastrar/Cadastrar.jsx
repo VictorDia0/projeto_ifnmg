@@ -79,6 +79,12 @@ const Cadastrar = () => {
                     </select>
                 </div>
                 <button type="submit">Cadastrar</button>
+                <h3>Importar dados do arquivo txt</h3>
+                <form method="POST" action="" encType="multipart/form-data">
+                    <label>Arquivo txt</label>
+                    <input type="file" name="arquivo"/>
+                    <input type="submit" value="Importar" />
+                </form>
                 {error && <p style={{ color: 'red' }}>{error}</p>}
                 <hr />
                 <div className="final">
