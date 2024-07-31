@@ -88,3 +88,7 @@ label {
   color: #666;
   font-size: 12px;
 }
+
+p {
+  text-align: center;
+}

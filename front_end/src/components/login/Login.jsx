@@ -1,37 +1,43 @@
-// src/components/login/Login.js
-import  { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaUser, FaLock } from "react-icons/fa";
 import axios from "axios";
 import "./login.css";
 
-const backendUrl = 'http://127.0.0.1:8000/api';
+const backendUrl = 'http://127.0.0.1:8000/';
 
 const Login = () => {
     const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState('');
-    const history = useHistory();
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setLoading(true);
         try {
-            const response = await axios.post(`${backendUrl}/login`, { user, password });
+            const response = await axios.post(`${backendUrl}api/login`, {
+                user,
+                password,
+            });
             const { token, role } = response.data;
 
-            localStorage.setItem('token', token);
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            localStorage.setItem("token", token);
+            axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-            if (role === 'ADM') {
-                history.push('/admin-dashboard');
-            } else if (role === 'NTC') {
-                history.push('/user-dashboard');
+            if (role === "ADM") {
+                navigate("/adm");
+            } else if (role === "NTC") {
+                navigate("/user-dashboard");
             } else {
-                setError('Unauthorized role');
+                setError("Unauthorized role");
             }
         } catch (error) {
-            setError('Invalid credentials');
+            setError("Invalid credentials");
             console.error(error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -41,6 +47,7 @@ const Login = () => {
                 <img src="/images/ifnmg.png" alt="" width="100" />
                 <hr />
                 <p>Preencha os campos para entrar</p>
+                <br />
 
                 <div className="input-field">
                     <FaUser className="icon" />
@@ -52,6 +59,7 @@ const Login = () => {
                         onChange={(e) => setUser(e.target.value)}
                     />
                 </div>
+
                 <div className="input-field">
                     <FaLock className="icon" />
                     <input
@@ -62,13 +70,11 @@ const Login = () => {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
-                <div>
-                    <input type="checkbox" />
-                    <label> Permanecer Conectado</label>
-                </div>
-                <button type="submit">Entrar</button>
+                <button type="submit">
+                    {loading ? 'Entrando...' : 'Entrar'}
+                </button>
 
-                {error && <p style={{ color: 'red' }}>{error}</p>}
+                {error && <p style={{ color: "red" }}>{error}</p>}
                 <hr />
                 <div className="final">
                     <p>© 2024 Gabriel de Sousa e Victor Dias</p>

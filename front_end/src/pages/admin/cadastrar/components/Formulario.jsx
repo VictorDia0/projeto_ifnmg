@@ -1,11 +1,11 @@
 import { FaUser, FaLock } from "react-icons/fa";
-import "./cadastrar.css";
+import "./formulario.css";
 import axios from "axios";
 import { useState } from "react";
 
-const backendUrl = 'http://127.0.0.1:8000/api';
+const backendUrl = 'http://127.0.0.1:8000/';
 
-const Cadastrar = () => {
+const Formulario = () => {
 
     const [name, setName] = useState("");
     const [user, setUser] = useState("");
@@ -17,7 +17,7 @@ const Cadastrar = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post(`${backendUrl}/users`, { name, user, password, role });
+            const response = await axios.post(`${backendUrl}api/users`, { name, user, password, role });
             console.log(response.data)
         } catch (error) {
             setError('Invalid credentials');
@@ -79,12 +79,6 @@ const Cadastrar = () => {
                     </select>
                 </div>
                 <button type="submit">Cadastrar</button>
-                <h3>Importar dados do arquivo txt</h3>
-                <form method="POST" action="" encType="multipart/form-data">
-                    <label>Arquivo txt</label>
-                    <input type="file" name="arquivo"/>
-                    <input type="submit" value="Importar" />
-                </form>
                 {error && <p style={{ color: 'red' }}>{error}</p>}
                 <hr />
                 <div className="final">
@@ -95,4 +89,4 @@ const Cadastrar = () => {
     );
 };
 
-export default Cadastrar;
+export default Formulario;
