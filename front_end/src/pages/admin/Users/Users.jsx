@@ -1,12 +1,13 @@
-import ListTable from '../../../components/ListTable/ListTable';
-import './Users.css';
+import ListTableStudents from "./ListTable/ListTable";
+import NavBar from "../components/Navbar";
 
 const Users = () => {
   return (
     <div>
-        <ListTable />
+      <NavBar />
+      <ListTableStudents />
     </div>
-  )
-}
+  );
+};
 
-export default Users
+export default Users;

@@ -2,8 +2,8 @@
 import { Routes,Route } from "react-router-dom";
 import "./ContentMain.css";
 import Home from "../../pages/admin/Home";
-import Users from "../../pages/admin/Users/Users";
-import Meals from "../../pages/admin/Meals/Meals";
+import Users from "../../Users/Users";
+import Meals from "../../Meals/Meals";
 import { Reports } from "../../pages/admin/Reports/Reports";
 import Settings from "../../pages/admin/Settings/Settings";
 

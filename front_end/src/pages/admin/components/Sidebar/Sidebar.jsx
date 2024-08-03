@@ -1,7 +1,7 @@
 import "./Sidebar.css"
 
 import { useContext, useEffect, useState } from "react";
-import { SidebarContext } from "../../context/sidebarContext"
+import { SidebarContext } from "../context/sidebarContext"
 import { Link }  from "react-router-dom";
 import { FaUsersGear, FaMoneyCheckDollar, FaGear, FaHouse, FaArrowRightFromBracket, FaAddressCard } from "react-icons/fa6";
 

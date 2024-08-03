@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import './InfoCards.css';
-import { FaUsers, FaUser, FaUtensils } from 'react-icons/fa';
-const backendUrl = 'http://127.0.0.1:8000/';
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import "./InfoCards.css";
+import { FaUsers, FaUser, FaUtensils } from "react-icons/fa";
+
+const backendUrl = "http://127.0.0.1:8000/";
 
 const InfoCards = () => {
   const [totalStudents, setTotalStudents] = useState(0);
@@ -12,22 +14,18 @@ const InfoCards = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/users');
+        const response = await axios.get(`${backendUrl}api/users`);
         setTotalStudents(response.data.length);
 
-        // Filtrando alunos com a regra ALM
-        const almResponse = await axios.get('http://127.0.0.1:8000/api/users/', {
-          params: {
-            role: 'ALN'
-          }
+        const almResponse = await axios.get(`${backendUrl}api/users`, {
+          params: { role: "ALN" },
         });
         setTotalALMStudents(almResponse.data.length);
 
         const mealResponse = await axios.get(`${backendUrl}api/meal`);
         setTotalMeal(mealResponse.data.length);
-
       } catch (error) {
-        console.error('Failed to fetch students', error);
+        console.error("Failed to fetch data", error);
       }
     };
 
@@ -37,18 +35,21 @@ const InfoCards = () => {
   return (
     <div className="info-cards">
       <div className="card">
-        <div className="card-content">
-          <div className="card-icon">
-            <FaUsers className="users-icon" />
+        <Link to="/list-table" className="card-link">
+          <div className="card-content">
+            <div className="card-icon">
+              <FaUsers className="users-icon" />
+            </div>
+            <div className="card-details">
+              <p>{totalALMStudents}</p>
+              <h3>Total de Alunos</h3>
+              <h3>Ver todos</h3>
+            </div>
           </div>
-          <div className="card-details">
-            <p>{totalALMStudents}</p>
 
-            <h3>Total de Alunos</h3>
-
-          </div>
-        </div>
+        </Link>
       </div>
+
       <div className="card">
         <div className="card-content">
           <div className="card-icon">
@@ -57,10 +58,11 @@ const InfoCards = () => {
           <div className="card-details">
             <p>{totalStudents}</p>
             <h3>Total de Usuários</h3>
-
+            <h3>Ver todos</h3>
           </div>
         </div>
       </div>
+
       <div className="card">
         <div className="card-content">
           <div className="card-icon">
@@ -69,7 +71,7 @@ const InfoCards = () => {
           <div className="card-details">
             <p>{totalMeal}</p>
             <h3>Total de Refeições</h3>
-
+            <h3>Ver todos</h3>
           </div>
         </div>
       </div>

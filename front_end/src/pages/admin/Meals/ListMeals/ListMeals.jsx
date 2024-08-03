@@ -6,7 +6,7 @@ const ListMeals = () => {
     const [mealRequests, setMealRequests] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredMealRequests, setFilteredMealRequests] = useState([]);
-    const [meals, setMeals] = useState([]); // Atualize para plural para indicar uma lista
+    const [meals, setMeals] = useState([]);
 
     useEffect(() => {
         const fetchMealRequests = async () => {
@@ -14,11 +14,9 @@ const ListMeals = () => {
                 const response = await axios.get('http://127.0.0.1:8000/api/mealrequests/');
                 setMealRequests(response.data);
                 setFilteredMealRequests(response.data);
-                console.log(response);
 
                 const responseMeal = await axios.get('http://127.0.0.1:8000/api/meal/');
-                setMeals(responseMeal.data); // Corrigido para armazenar a lista de refeições
-                console.log(responseMeal)
+                setMeals(responseMeal.data);
             } catch (error) {
                 console.error('Failed to fetch meal requests', error);
             }
@@ -40,6 +38,7 @@ const ListMeals = () => {
     return (
         <div className="list-table">
             <div className="search-bar">
+
                 <input
                     type="text"
                     placeholder="Pesquisar por CPF do Aluno"

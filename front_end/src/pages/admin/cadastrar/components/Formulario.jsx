@@ -6,24 +6,34 @@ import { useState } from "react";
 const backendUrl = 'http://127.0.0.1:8000/';
 
 const Formulario = () => {
-
     const [name, setName] = useState("");
     const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("");
     const [error, setError] = useState('');
-
+    const [success, setSuccess] = useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
             const response = await axios.post(`${backendUrl}api/users`, { name, user, password, role });
-            console.log(response.data)
+            console.log(response.data);
+            setSuccess(true);  // Mostra a mensagem de sucesso
         } catch (error) {
-            setError('Invalid credentials');
+            setError('Erro ao cadastrar usuário');
             console.error(error);
         }
     };
+
+    const handleOkClick = () => {
+        setSuccess(false);  // Esconde a mensagem de sucesso
+        setName('');
+        setUser('');
+        setPassword('');
+        setRole('');
+        setError('');
+    };
+
     return (
         <div className="container">
             <form onSubmit={handleSubmit}>
@@ -44,7 +54,7 @@ const Formulario = () => {
                     <input
                         type="text"
                         name="user"
-                        placeholder="Digite seu usuario"
+                        placeholder="Digite seu usuário"
                         value={user}
                         onChange={(e) => setUser(e.target.value)}
                     />
@@ -60,22 +70,19 @@ const Formulario = () => {
                     />
                 </div>
                 <div>
-                    <label>Selecione o tipo do usuario: </label>
-
+                    <label>Selecione o tipo do usuário: </label>
                     <select
                         id="role"
-                        type="role"
                         name="role"
                         value={role}
                         onChange={(e) => setRole(e.target.value)}
                     >
                         <option value=""></option>
-                        <option value="ADM">ADM</option>
-                        <option value="ALN">ALN</option>
-                        <option value="NTC">NTC</option>
-                        <option value="ASS">ASS</option>
-                        <option value="EMP">EMP</option>
-
+                        <option value="ADM">ADMINISTRADOR</option>
+                        <option value="ALN">ALUNO</option>
+                        <option value="NTC">NUTRICIONISTA</option>
+                        <option value="ASS">ASSISTENTE SOCIAL</option>
+                        <option value="EMP">EMPRESA</option>
                     </select>
                 </div>
                 <button type="submit">Cadastrar</button>
@@ -85,6 +92,15 @@ const Formulario = () => {
                     <p>© 2024 Gabriel de Sousa e Victor Dias</p>
                 </div>
             </form>
+
+            {success && (
+                <div className="success-modal">
+                    <div className="success-content">
+                        <p>Usuário cadastrado com sucesso!</p>
+                        <button onClick={handleOkClick}>OK</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
