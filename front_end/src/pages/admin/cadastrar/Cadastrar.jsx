@@ -1,5 +1,5 @@
 import NavBar from "../components/Navbar";
-import Formulario from "./components/Formulario";
+import Formulario from "./Formulario/Formulario";
 
 const Cadastrar = () => {
   return (
