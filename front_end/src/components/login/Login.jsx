@@ -23,9 +23,9 @@ const Login = () => {
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
             if (role === 'ADM') {
-                history.push('/admin-dashboard');
+                history.push('/ADM');
             } else if (role === 'NTC') {
-                history.push('/user-dashboard');
+                // history.push('/user-dashboard');
             } else {
                 setError('Unauthorized role');
             }
