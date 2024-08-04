@@ -1,13 +1,4 @@
-/* const [showModal, setShowModal] = useState(false);
-  const [editingStudent, setEditingStudent] = useState(null);
-  const [formData, setFormData] = useState({
-    id: '',
-    name: '',
-    cpf: '',
-    phone_number: '',
-    email: '',
-    role: '',
-  }); */
+/*  */
 
    /* const handleEdit = (student) => {
     setEditingStudent(student);
@@ -45,56 +36,7 @@
   };*/
 
 
-  {/* 
-      {showModal && ( 
-        <div className="modal">
-          <form onSubmit={handleFormSubmit}>
-            <h2>{editingStudent ? 'Editar Aluno' : 'Adicionar Novo Aluno'}</h2>
-            <input
-              type="text"
-              placeholder="Nome"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              required
-            />
-            <input
-              type="text"
-              placeholder="CPF"
-              name="cpf"
-              value={formData.cpf}
-              onChange={handleInputChange}
-              required
-            />
-            <input
-              type="text"
-              placeholder="Telefone"
-              name="phone_number"
-              value={formData.phone_number}
-              onChange={handleInputChange}
-              required
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-            />
-            <input
-              type="text"
-              placeholder="Função"
-              name="role"
-              value={formData.role}
-              onChange={handleInputChange}
-              required
-            />
-            <button type="submit">{editingStudent ? 'Salvar' : 'Adicionar'}</button>
-          </form>
-          <button onClick={() => setShowModal(false)}>Cancelar</button>
-        </div>
-      )}*/}
+
 
 /* 
 
