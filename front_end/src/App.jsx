@@ -1,26 +1,21 @@
-import "./App.css";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./components/login/Login";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
-
-
-import Users from "./pages/admin/Users/Users";
+import MainAdm from "./ADM/MainAdm";
+import { useState } from "react";
+import './App.css'
 
 const App = () => {
-  return (
-    <div className="app">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          {/* <Route path="/adm" element={<Home />} />
-          <Route path="/students" element={<Users/>} />
-          <Route path="/meals" element={<Home />} />
-          <Route path="/users" element={<Home />} />
-          <Route path="/cadastrar" element={<Cadastrar />} /> */}
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-          
-        </Routes>
-      </BrowserRouter>
-    </div>
+  return (
+    <Routes>
+      <Route path="/" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+      {isLoggedIn ? (
+        <Route path="/adm/*" element={<MainAdm />} />
+      ) : (
+        <Route path="*" element={<Navigate to="/" />} />
+      )}
+    </Routes>
   );
 };
 

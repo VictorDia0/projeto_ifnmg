@@ -58,7 +58,7 @@ input[type="password"]:focus {
 }
 
 /* Botão de envio */
-button {
+button[type='submit']{
   width: 100%;
   padding: 10px;
   background-color: #0056b3;

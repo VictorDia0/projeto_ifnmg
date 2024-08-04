@@ -14,8 +14,7 @@ const Content = () => {
   return (
     <div className={`main-content ${isSidebarExpanded ? '' : 'collapsed'}`}>
       <ContentTop />
-      <ContentMain />
-      
+      <ContentMain /> 
     </div>
   );
 };
