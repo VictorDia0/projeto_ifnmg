@@ -23,7 +23,8 @@
 
 .container2 {
     width: 100%;
-    background-color: #2f9e41;
+    background-color: rgba(0, 0, 0,0);
+    border: rgb(47, 158, 65) solid 1px;
     height: 80px;
     backdrop-filter: blur(2xl);
     border-radius: 9999px;
@@ -36,7 +37,8 @@
     justify-content: space-between;
     align-items: center;
     font-size: 1.5rem;
-    color: rgba(255, 255, 255, 0.5);
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight: lighter;
 }
 
 .container2 a {
@@ -45,5 +47,5 @@
 }
 
 .container2 a:hover {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(47, 158, 65, 0.8);;
 }
