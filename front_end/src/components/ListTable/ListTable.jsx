@@ -1,148 +1,145 @@
-import  { useState, useEffect } from 'react';
-import axios from 'axios';
-import './ListTable.css';
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+import {
+  CButton,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHeaderCell,
+  CTableHead,
+  CTableRow,
+  CModal,
+  CModalBody,
+  CModalHeader,
+  CModalTitle,
+  CFormInput,
+  CForm,
+} from '@coreui/react'
 
-const ListTable = () => {
-  const [students, setStudents] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filteredStudents, setFilteredStudents] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [editingStudent, setEditingStudent] = useState(null);
+const UserListWithAdd = () => {
+  const [users, setUsers] = useState([])
+  const [showModal, setShowModal] = useState(false)
   const [formData, setFormData] = useState({
-    id: '',
     name: '',
     cpf: '',
     phone_number: '',
     email: '',
     role: '',
-  });
+  })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const [successMessage, setSuccessMessage] = useState('')
 
   useEffect(() => {
-    const fetchStudents = async () => {
+    const fetchUsers = async () => {
+      setLoading(true)
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/users/');
-        setStudents(response.data);
-        setFilteredStudents(response.data);
+        const response = await axios.get('http://127.0.0.1:8000/api/users/')
+        setUsers(response.data)
       } catch (error) {
-        console.error('Failed to fetch students', error);
+        setError('Failed to fetch users')
+      } finally {
+        setLoading(false)
       }
-    };
-
-    fetchStudents();
-  }, []);
-
-  useEffect(() => {
-    setFilteredStudents(
-      students.filter(student => student.cpf.includes(searchTerm))
-    );
-  }, [searchTerm, students]);
-
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const handleEdit = (student) => {
-    setEditingStudent(student);
-    setFormData({ ...student });
-    setShowModal(true);
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`http://127.0.0.1:8000/api/users/${id}`);
-      setStudents(students.filter(student => student.id !== id));
-      setFilteredStudents(filteredStudents.filter(student => student.id !== id));
-    } catch (error) {
-      console.error('Failed to delete student', error);
     }
-  };
+    fetchUsers()
+  }, [])
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+    const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (editingStudent) {
-      // Editar aluno
-      try {
-        const response = await axios.put(`http://127.0.0.1:8000/api/users/${formData.id}`, formData);
-        setStudents(students.map(student => (student.id === formData.id ? response.data : student)));
-        setFilteredStudents(filteredStudents.map(student => (student.id === formData.id ? response.data : student)));
-      } catch (error) {
-        console.error('Failed to edit student', error);
-      }
-    } else {
-      // Adicionar novo aluno
-      try {
-        const response = await axios.post('http://127.0.0.1:8000/api/users', formData);
-        setStudents([...students, response.data]);
-        setFilteredStudents([...filteredStudents, response.data]);
-      } catch (error) {
-        console.error('Failed to add student', error);
-      }
+    e.preventDefault()
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/api/users', formData)
+      setUsers([...users, response.data])
+      setSuccessMessage('User added successfully')
+      setShowModal(false)
+      setFormData({
+        name: '',
+        cpf: '',
+        phone_number: '',
+        email: '',
+        role: '',
+      })
+    } catch (error) {
+      setError('Failed to add user')
     }
-    setShowModal(false);
-    setEditingStudent(null);
-    setFormData({ id: '', name: '', cpf: '', phone_number: '', email: '', role: '' });
-  };
+  }
+
+  const handleModalClose = () => {
+    setShowModal(false)
+    setFormData({
+      name: '',
+      cpf: '',
+      phone_number: '',
+      email: '',
+      role: '',
+    })
+  }
 
   return (
-    <div className="list-table">
-      <div className="search-bar">
-        <input
-          type="text"
-          placeholder="Pesquisar por CPF"
-          value={searchTerm}
-          onChange={handleSearchChange}
-        />
-        <button className="add" onClick={() => setShowModal(true)}>Adicionar Aluno</button>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>CPF</th>
-            <th>Telefone</th>
-            <th>Email</th>
-            <th>Função</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredStudents.map((student) => (
-            <tr key={student.id}>
-              <td>{student.id}</td>
-              <td>{student.name}</td>
-              <td>{student.cpf}</td>
-              <td>{student.phone_number}</td>
-              <td>{student.email}</td>
-              <td>{student.role}</td>
-              <td>
-                <button onClick={() => handleEdit(student)}><FaEdit /></button>
-                <button onClick={() => handleDelete(student.id)}><FaTrash /></button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <>
+      {loading && <p>Loading...</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
+      
+      <CButton color="primary" onClick={() => setShowModal(true)}>
+        Add User
+      </CButton>
+      
+      <CTable className="mt-4">
+        <CTableHead>
+          <CTableRow>
+            <CTableHeaderCell>ID</CTableHeaderCell>
+            <CTableHeaderCell>Name</CTableHeaderCell>
+            <CTableHeaderCell>CPF</CTableHeaderCell>
+            <CTableHeaderCell>Phone Number</CTableHeaderCell>
+            <CTableHeaderCell>Email</CTableHeaderCell>
+            <CTableHeaderCell>Role</CTableHeaderCell>
+          </CTableRow>
+        </CTableHead>
+        <CTableBody>
+          {users.length > 0 ? (
+            users.map((user) => (
+              <CTableRow key={user.id}>
+                <CTableDataCell>{user.id}</CTableDataCell>
+                <CTableDataCell>{user.name}</CTableDataCell>
+                <CTableDataCell>{user.cpf}</CTableDataCell>
+                <CTableDataCell>{user.phone_number}</CTableDataCell>
+                <CTableDataCell>{user.email}</CTableDataCell>
+                <CTableDataCell>{user.role}</CTableDataCell>
+              </CTableRow>
+            ))
+          ) : (
+            <CTableRow>
+              <CTableDataCell colSpan="6" className="text-center">
+                No users found
+              </CTableDataCell>
+            </CTableRow>
+          )}
+        </CTableBody>
+      </CTable>
 
-      {showModal && (
-        <div className="modal">
-          <form onSubmit={handleSubmit}>
-            <h2>{editingStudent ? 'Editar Aluno' : 'Adicionar Novo Aluno'}</h2>
-            <input
+      <CModal visible={showModal} onClose={handleModalClose}>
+        <CModalHeader>
+          <CModalTitle>Add New User</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CForm onSubmit={handleSubmit}>
+            <CFormInput
+              className="mb-4"
               type="text"
-              placeholder="Nome"
+              placeholder="Name"
               name="name"
               value={formData.name}
               onChange={handleInputChange}
               required
             />
-            <input
+            <CFormInput
+              className="mb-4"
               type="text"
               placeholder="CPF"
               name="cpf"
@@ -150,15 +147,17 @@ const ListTable = () => {
               onChange={handleInputChange}
               required
             />
-            <input
+            <CFormInput
+              className="mb-4"
               type="text"
-              placeholder="Telefone"
+              placeholder="Phone Number"
               name="phone_number"
               value={formData.phone_number}
               onChange={handleInputChange}
               required
             />
-            <input
+            <CFormInput
+              className="mb-4"
               type="email"
               placeholder="Email"
               name="email"
@@ -166,21 +165,23 @@ const ListTable = () => {
               onChange={handleInputChange}
               required
             />
-            <input
+            <CFormInput
+              className="mb-4"
               type="text"
-              placeholder="Função"
+              placeholder="Role"
               name="role"
               value={formData.role}
               onChange={handleInputChange}
               required
             />
-            <button type="submit">{editingStudent ? 'Salvar' : 'Adicionar'}</button>
-          </form>
-          <button onClick={() => setShowModal(false)}>Cancelar</button>
-        </div>
-      )}
-    </div>
-  );
-};
+            <CButton type="submit" color="primary" className="mt-2">
+              Add User
+            </CButton>
+          </CForm>
+        </CModalBody>
+      </CModal>
+    </>
+  )
+}
 
-export default ListTable;
+export default UserListWithAdd
