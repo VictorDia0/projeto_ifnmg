@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
-import axios from 'axios'
-import { cilPlus, cilPen, cilDelete, cilSearch } from '@coreui/icons'
+import { useState, useEffect } from 'react';
+import axios from '../axiosConfig';
+import { cilPlus, cilPen, cilDelete, cilSearch } from '@coreui/icons';
 import {
   CButton,
   CTable,
@@ -18,14 +18,14 @@ import {
   CCard,
   CCardBody,
   CCardHeader,
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+} from '@coreui/react';
+import CIcon from '@coreui/icons-react';
 
 const ListTable = () => {
-  const [students, setStudents] = useState([])
-  const [filteredStudents, setFilteredStudents] = useState([])
-  const [showModal, setShowModal] = useState(false)
-  const [editingStudent, setEditingStudent] = useState(null)
+  const [students, setStudents] = useState([]);
+  const [filteredStudents, setFilteredStudents] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [editingStudent, setEditingStudent] = useState(null);
   const [formData, setFormData] = useState({
     id: '',
     name: '',
@@ -33,40 +33,40 @@ const ListTable = () => {
     phone_number: '',
     email: '',
     role: '',
-  })
-  const [selectedStudent, setSelectedStudent] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [successMessage, setSuccessMessage] = useState('')
+  });
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
     const fetchStudents = async () => {
-      setLoading(true)
+      setLoading(true);
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/users/')
-        setStudents(response.data)
-        setFilteredStudents(response.data)
+        const response = await axios.get('/users/');
+        setStudents(response.data);
+        setFilteredStudents(response.data);
       } catch (error) {
-        console.error('Failed to fetch students', error)
-        setError('Failed to fetch students')
+        console.error('Failed to fetch students', error);
+        setError('Failed to fetch students');
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
-    fetchStudents()
-  }, [])
+    };
+    fetchStudents();
+  }, []);
 
   useEffect(() => {
     const filtered = students.filter((student) =>
       (student.cpf ? student.cpf.toLowerCase().includes(searchTerm.toLowerCase()) : false) ||
       (student.name ? student.name.toLowerCase().includes(searchTerm.toLowerCase()) : false)
-    )
-    setFilteredStudents(filtered)
-  }, [searchTerm, students])
+    );
+    setFilteredStudents(filtered);
+  }, [searchTerm, students]);
 
   const handleEdit = (student) => {
-    setEditingStudent(student)
+    setEditingStudent(student);
     setFormData({
       id: student.id,
       name: student.name,
@@ -74,65 +74,65 @@ const ListTable = () => {
       phone_number: student.phone_number,
       email: student.email,
       role: student.role,
-    })
-    setShowModal(true)
-  }
+    });
+    setShowModal(true);
+  };
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this student?')) {
       try {
-        await axios.delete(`http://127.0.0.1:8000/api/users/${id}`)
-        setStudents((prev) => prev.filter((student) => student.id !== id))
-        setFilteredStudents((prev) => prev.filter((student) => student.id !== id))
-        setSuccessMessage('Student deleted successfully')
+        await axios.delete(`/users/${id}`);
+        setStudents((prev) => prev.filter((student) => student.id !== id));
+        setFilteredStudents((prev) => prev.filter((student) => student.id !== id));
+        setSuccessMessage('Student deleted successfully');
       } catch (error) {
-        console.error('Failed to delete student', error)
-        setError('Failed to delete student')
+        console.error('Failed to delete student', error);
+        setError('Failed to delete student');
       }
     }
-  }
+  };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       if (editingStudent) {
-        const response = await axios.put(`http://127.0.0.1:8000/api/users/${formData.id}`, formData)
+        const response = await axios.put(`/users/${formData.id}`, formData);
         setStudents((prev) =>
           prev.map((student) => (student.id === formData.id ? response.data : student))
-        )
+        );
         setFilteredStudents((prev) =>
           prev.map((student) => (student.id === formData.id ? response.data : student))
-        )
-        setSuccessMessage('Student updated successfully')
+        );
+        setSuccessMessage('Student updated successfully');
       } else {
-        const response = await axios.post('http://127.0.0.1:8000/api/users', formData)
-        setStudents((prev) => [...prev, response.data])
-        setFilteredStudents((prev) => [...prev, response.data])
-        setSuccessMessage('Student added successfully')
+        const response = await axios.post('/users', formData);
+        setStudents((prev) => [...prev, response.data]);
+        setFilteredStudents((prev) => [...prev, response.data]);
+        setSuccessMessage('Student added successfully');
       }
-      setShowModal(false)
-      setEditingStudent(null)
-      setFormData({ id: '', name: '', cpf: '', phone_number: '', email: '', role: '' })
+      setShowModal(false);
+      setEditingStudent(null);
+      setFormData({ id: '', name: '', cpf: '', phone_number: '', email: '', role: '' });
     } catch (error) {
-      console.error('Failed to save student', error)
-      setError('Failed to save student')
+      console.error('Failed to save student', error);
+      setError('Failed to save student');
     }
-  }
+  };
 
   const handleModalClose = () => {
-    setShowModal(false)
-    setEditingStudent(null)
-    setFormData({ id: '', name: '', cpf: '', phone_number: '', email: '', role: '' })
-  }
+    setShowModal(false);
+    setEditingStudent(null);
+    setFormData({ id: '', name: '', cpf: '', phone_number: '', email: '', role: '' });
+  };
 
   const handleStudentClick = (student) => {
-    setSelectedStudent(student)
-  }
+    setSelectedStudent(student);
+  };
 
   return (
     <div className="d-flex">
@@ -188,8 +188,8 @@ const ListTable = () => {
                     <CButton
                       color="info"
                       onClick={(e) => {
-                        e.stopPropagation()
-                        handleEdit(student)
+                        e.stopPropagation();
+                        handleEdit(student);
                       }}
                       className="me-2"
                     >
@@ -198,8 +198,8 @@ const ListTable = () => {
                     <CButton
                       color="danger"
                       onClick={(e) => {
-                        e.stopPropagation()
-                        handleDelete(student.id)
+                        e.stopPropagation();
+                        handleDelete(student.id);
                       }}
                     >
                       <CIcon icon={cilDelete} />
@@ -235,14 +235,14 @@ const ListTable = () => {
 
       <CModal visible={showModal} onClose={handleModalClose}>
         <CModalHeader>
-          <CModalTitle>{editingStudent ? 'Editar' : 'Adicionar um novo User'}</CModalTitle>
+          <CModalTitle>{editingStudent ? 'Editar' : 'Adicionar um novo Usuário'}</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CForm onSubmit={handleSubmit}>
             <CFormInput
               className='mb-4'
               type="text"
-              placeholder="Name"
+              placeholder="Nome"
               name="name"
               value={formData.name}
               onChange={handleInputChange}
@@ -260,7 +260,7 @@ const ListTable = () => {
             <CFormInput
               className='mb-4'
               type="text"
-              placeholder="Phone Number"
+              placeholder="Número de Telefone"
               name="phone_number"
               value={formData.phone_number}
               onChange={handleInputChange}
@@ -278,20 +278,20 @@ const ListTable = () => {
             <CFormInput
               className='mb-4'
               type="text"
-              placeholder="Role"
+              placeholder="Tipo"
               name="role"
               value={formData.role}
               onChange={handleInputChange}
               required
             />
             <CButton type="submit" color="primary" className="mt-2">
-              {editingStudent ? 'Update' : 'Add'}
+              {editingStudent ? 'Atualizar' : 'Adicionar'}
             </CButton>
           </CForm>
         </CModalBody>
       </CModal>
     </div>
-  )
-}
+  );
+};
 
-export default ListTable
+export default ListTable;
