@@ -34,7 +34,7 @@ class UserController extends Controller
             'role' => 'required|in:ADM,ALN,NTC,ASS,EMP',
             'cpf' => 'nullable|string|unique:users,cpf',
             'phone_number' => 'nullable|string',
-            'email' => 'nullable|string|email|max:191|unique:users,email',
+            'email' => 'required|string|email|max:191|unique:users,email',
             'bolsista' => 'sometimes|boolean',
         ]);
 

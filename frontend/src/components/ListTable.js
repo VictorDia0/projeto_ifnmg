@@ -296,7 +296,7 @@ const ListTable = () => {
               value={formData.cpf}
               onChange={handleInputChange}
               className="mb-3"
-              required
+              
             />
             <CFormInput
               type="text"
@@ -332,7 +332,7 @@ const ListTable = () => {
               value={formData.password}
               onChange={handleInputChange}
               className="mb-3"
-              required={!editingStudent} // Exige senha somente ao adicionar
+              required={!editingStudent} 
             />
             <CFormSelect
               name="role"
