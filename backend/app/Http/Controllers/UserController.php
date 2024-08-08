@@ -23,6 +23,10 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+         // Converter o valor de bolsista para um booleano
+        $request->merge([
+            'bolsista' => filter_var($request->input('bolsista'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
+        ]);
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'user' => 'required|string|unique:users,user',

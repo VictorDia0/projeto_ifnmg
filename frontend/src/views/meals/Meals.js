@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from '../../axiosConfig';
 import { CFormInput, CButton, CCard, CCardBody, CCardHeader, CCardTitle, CForm, CTable, CTableHead, CTableBody, CTableRow, CTableHeaderCell, CTableDataCell } from '@coreui/react';
 
 const Meals = () => {
@@ -15,7 +15,7 @@ const Meals = () => {
   useEffect(() => {
     const fetchMeals = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/meal');
+        const response = await axios.get('/meal');
         setMeals(response.data);
       } catch (error) {
         console.error('Failed to fetch meals', error);
@@ -33,7 +33,7 @@ const Meals = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/meal', formData);
+      const response = await axios.post('/meal', formData);
       setMeals([...meals, response.data.meal]);
       setSuccessMessage('Refeição adicionada com sucesso!');
       setErrorMessage('');
@@ -93,8 +93,11 @@ const Meals = () => {
             ))}
           </CTableBody>
         </CTable>
+        {/* <ListMeals></ListMeals> */}
       </CCardBody>
+    
     </CCard>
+    
   );
 };
 

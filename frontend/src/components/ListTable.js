@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import axios from '../axiosConfig';
-import { cilPlus, cilPen, cilDelete, cilSearch } from '@coreui/icons';
+import { useState, useEffect } from "react";
+import axios from "../axiosConfig";
+import { cilPlus, cilPen, cilDelete, cilSearch } from "@coreui/icons";
 import {
   CButton,
   CTable,
@@ -18,8 +18,9 @@ import {
   CCard,
   CCardBody,
   CCardHeader,
-} from '@coreui/react';
-import CIcon from '@coreui/icons-react';
+  CFormSelect
+} from "@coreui/react";
+import CIcon from "@coreui/icons-react";
 
 const ListTable = () => {
   const [students, setStudents] = useState([]);
@@ -27,29 +28,32 @@ const ListTable = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState(null);
   const [formData, setFormData] = useState({
-    id: '',
-    name: '',
-    cpf: '',
-    phone_number: '',
-    email: '',
-    role: '',
+    id: "",
+    name: "",
+    cpf: "",
+    phone_number: "",
+    email: "",
+    user: "",
+    password: "",
+    role: "",
+    bolsista: "false" // Alterado para string
   });
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     const fetchStudents = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('/users/');
+        const response = await axios.get("/users/");
         setStudents(response.data);
         setFilteredStudents(response.data);
       } catch (error) {
-        console.error('Failed to fetch students', error);
-        setError('Failed to fetch students');
+        console.error("Failed to fetch students", error);
+        setError("Failed to fetch students");
       } finally {
         setLoading(false);
       }
@@ -58,9 +62,14 @@ const ListTable = () => {
   }, []);
 
   useEffect(() => {
-    const filtered = students.filter((student) =>
-      (student.cpf ? student.cpf.toLowerCase().includes(searchTerm.toLowerCase()) : false) ||
-      (student.name ? student.name.toLowerCase().includes(searchTerm.toLowerCase()) : false)
+    const filtered = students.filter(
+      (student) =>
+        (student.cpf
+          ? student.cpf.toLowerCase().includes(searchTerm.toLowerCase())
+          : false) ||
+        (student.name
+          ? student.name.toLowerCase().includes(searchTerm.toLowerCase())
+          : false)
     );
     setFilteredStudents(filtered);
   }, [searchTerm, students]);
@@ -70,64 +79,80 @@ const ListTable = () => {
     setFormData({
       id: student.id,
       name: student.name,
-      cpf: student.cpf,
-      phone_number: student.phone_number,
-      email: student.email,
-      role: student.role,
+      cpf: student.cpf || "",
+      phone_number: student.phone_number || "",
+      email: student.email || "",
+      user: student.user || "",
+      password: "", // Não exibir a senha ao editar
+      role: student.role || "",
+      bolsista: student.bolsista ? true : false // Converter para string
     });
     setShowModal(true);
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this student?')) {
+    if (window.confirm("Are you sure you want to delete this student?")) {
       try {
         await axios.delete(`/users/${id}`);
         setStudents((prev) => prev.filter((student) => student.id !== id));
-        setFilteredStudents((prev) => prev.filter((student) => student.id !== id));
-        setSuccessMessage('Student deleted successfully');
+        setFilteredStudents((prev) =>
+          prev.filter((student) => student.id !== id)
+        );
+        setSuccessMessage("Student deleted successfully");
       } catch (error) {
-        console.error('Failed to delete student', error);
-        setError('Failed to delete student');
+        console.error("Failed to delete student", error);
+        setError("Failed to delete student");
       }
     }
   };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (editingStudent) {
+       
         const response = await axios.put(`/users/${formData.id}`, formData);
-        setStudents((prev) =>
-          prev.map((student) => (student.id === formData.id ? response.data : student))
-        );
-        setFilteredStudents((prev) =>
-          prev.map((student) => (student.id === formData.id ? response.data : student))
-        );
-        setSuccessMessage('Student updated successfully');
       } else {
-        const response = await axios.post('/users', formData);
-        setStudents((prev) => [...prev, response.data]);
-        setFilteredStudents((prev) => [...prev, response.data]);
-        setSuccessMessage('Student added successfully');
+        
+        const response = await axios.post("/users", formData);
       }
       setShowModal(false);
-      setEditingStudent(null);
-      setFormData({ id: '', name: '', cpf: '', phone_number: '', email: '', role: '' });
+     
     } catch (error) {
-      console.error('Failed to save student', error);
-      setError('Failed to save student');
+      if (error.response) {
+        console.error("Erro na solicitação:", error.response.data);
+        // Exibir mensagem de erro para o usuário
+        setError(error.response.data.message || "Erro ao salvar os dados");
+      } else {
+        console.error("Erro na solicitação:", error.message);
+        setError("Erro ao enviar a solicitação");
+      }
     }
   };
+  
 
   const handleModalClose = () => {
     setShowModal(false);
     setEditingStudent(null);
-    setFormData({ id: '', name: '', cpf: '', phone_number: '', email: '', role: '' });
+    setFormData({
+      id: "",
+      name: "",
+      cpf: "",
+      phone_number: "",
+      email: "",
+      user: "",
+      password: "",
+      role: "",
+      bolsista: false
+    });
   };
 
   const handleStudentClick = (student) => {
@@ -138,8 +163,8 @@ const ListTable = () => {
     <div className="d-flex">
       <div className="flex-grow-1">
         {loading && <p>Loading...</p>}
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
         <div className="search-bar mb-4">
           <CForm className="d-flex align-items-center">
             <CFormInput
@@ -152,7 +177,11 @@ const ListTable = () => {
             <CButton color="primary">
               <CIcon icon={cilSearch} />
             </CButton>
-            <CButton color="primary" onClick={() => setShowModal(true)} className="ms-2">
+            <CButton
+              color="primary"
+              onClick={() => setShowModal(true)}
+              className="ms-2"
+            >
               <CIcon icon={cilPlus} />
             </CButton>
           </CForm>
@@ -176,7 +205,7 @@ const ListTable = () => {
                 <CTableRow
                   key={student.id}
                   onClick={() => handleStudentClick(student)}
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: "pointer" }}
                 >
                   <CTableDataCell>{student.id}</CTableDataCell>
                   <CTableDataCell>{student.name}</CTableDataCell>
@@ -218,16 +247,26 @@ const ListTable = () => {
         </CTable>
       </div>
 
-      <div style={{ flex: '0 0 300px', marginLeft: '20px' }}>
+      <div style={{ flex: "0 0 300px", marginLeft: "20px" }}>
         {selectedStudent && (
           <CCard>
             <CCardHeader>Detalhes do usuário</CCardHeader>
             <CCardBody>
-              <p><strong>Nome:</strong> {selectedStudent.name}</p>
-              <p><strong>CPF:</strong> {selectedStudent.cpf}</p>
-              <p><strong>Número:</strong> {selectedStudent.phone_number}</p>
-              <p><strong>Email:</strong> {selectedStudent.email}</p>
-              <p><strong>Tipo:</strong> {selectedStudent.role}</p>
+              <p>
+                <strong>Nome:</strong> {selectedStudent.name}
+              </p>
+              <p>
+                <strong>CPF:</strong> {selectedStudent.cpf}
+              </p>
+              <p>
+                <strong>Número:</strong> {selectedStudent.phone_number}
+              </p>
+              <p>
+                <strong>Email:</strong> {selectedStudent.email}
+              </p>
+              <p>
+                <strong>Tipo:</strong> {selectedStudent.role}
+              </p>
             </CCardBody>
           </CCard>
         )}
@@ -235,57 +274,90 @@ const ListTable = () => {
 
       <CModal visible={showModal} onClose={handleModalClose}>
         <CModalHeader>
-          <CModalTitle>{editingStudent ? 'Editar' : 'Adicionar um novo Usuário'}</CModalTitle>
+          <CModalTitle>
+            {editingStudent ? "Editar" : "Adicionar um novo Usuário"}
+          </CModalTitle>
         </CModalHeader>
         <CModalBody>
           <CForm onSubmit={handleSubmit}>
-            <CFormInput
-              className='mb-4'
+          <CFormInput
               type="text"
-              placeholder="Nome"
               name="name"
+              placeholder="Nome"
               value={formData.name}
               onChange={handleInputChange}
+              className="mb-3"
               required
             />
             <CFormInput
-              className='mb-4'
               type="text"
-              placeholder="CPF"
               name="cpf"
+              placeholder="CPF"
               value={formData.cpf}
               onChange={handleInputChange}
+              className="mb-3"
               required
             />
             <CFormInput
-              className='mb-4'
               type="text"
-              placeholder="Número de Telefone"
               name="phone_number"
+              placeholder="Número"
               value={formData.phone_number}
               onChange={handleInputChange}
+              className="mb-3"
               required
             />
             <CFormInput
-              className='mb-4'
               type="email"
-              placeholder="Email"
               name="email"
+              placeholder="Email"
               value={formData.email}
               onChange={handleInputChange}
+              className="mb-3"
               required
             />
             <CFormInput
-              className='mb-4'
               type="text"
-              placeholder="Tipo"
+              name="user"
+              placeholder="Nome de Usuário"
+              value={formData.user}
+              onChange={handleInputChange}
+              className="mb-3"
+              required
+            />
+            <CFormInput
+              type="password"
+              name="password"
+              placeholder="Senha"
+              value={formData.password}
+              onChange={handleInputChange}
+              className="mb-3"
+              required={!editingStudent} // Exige senha somente ao adicionar
+            />
+            <CFormSelect
               name="role"
               value={formData.role}
               onChange={handleInputChange}
+              className="mb-3"
               required
-            />
+            >
+              <option value="">Selecione o papel</option>
+              <option value="ADM">Admin</option>
+              <option value="ALN">Aluno</option>
+              <option value="NTC">Nutricionista</option>
+            </CFormSelect>
+            <CFormSelect
+              name="bolsista"
+              value={formData.bolsista}
+              onChange={handleInputChange}
+              className="mb-3"
+              required
+            >
+              <option value="false">Não</option>
+              <option value="true">Sim</option>
+            </CFormSelect>
             <CButton type="submit" color="primary" className="mt-2">
-              {editingStudent ? 'Atualizar' : 'Adicionar'}
+              {editingStudent ? "Atualizar" : "Adicionar"}
             </CButton>
           </CForm>
         </CModalBody>
