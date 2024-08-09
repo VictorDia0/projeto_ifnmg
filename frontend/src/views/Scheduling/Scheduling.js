@@ -33,7 +33,7 @@ const Scheduling = () => {
   const fetchMeals = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("/mealrequests/", {
+      const response = await axios.get("/mealrequests", {
         params: {
           date: filterDate,
         },
@@ -90,18 +90,17 @@ const Scheduling = () => {
         request_date: requestDate,
         quantity: 1, // Supondo que todos os bolsistas devem receber a mesma quantidade
       };
-  
-       await axios.post("/mealrequests/scheduleforbolsistas", request);
-      
+
+      await axios.post("/mealrequests/", request);
+
       fetchMeals();
-      fetchAddedMeals(); 
+      fetchAddedMeals();
       setShowModal(false);
     } catch (err) {
       console.error("Failed to schedule meals:", err);
       setError("Failed to schedule meals");
     }
   };
-  
 
   const getStatusColor = (status) => {
     switch (status) {

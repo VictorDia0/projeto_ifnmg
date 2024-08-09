@@ -48,12 +48,8 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
         Route::put('/{id}', [MealRequestController::class, 'update']);
         Route::delete('/{id}', [MealRequestController::class, 'destroy']);
         Route::post('/schedule', [MealRequestController::class, 'schedule']);
-        
-
     });
-    Route::get('/test', function () {
-        return response()->json(['message' => 'Test route is working']);
-    });
+   
     
     Route::post('/logout/{id}', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);

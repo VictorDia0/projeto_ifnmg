@@ -24,22 +24,45 @@ class MealRequestController extends Controller
      * Store a newly created meal request in storage.
      */
     public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'user_id' => 'required|exists:users,id',
-            'meal_id' => 'required|exists:meals,id',
-            'request_date' => 'required|date',
-            'quantity' => 'required|integer|min:1',
-        ]);
+{
+    $validator = Validator::make($request->all(), [
+        'meal_id' => 'required|exists:meals,id',
+        'request_date' => 'required|date',
+        'quantity' => 'required|integer|min:1',
+    ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-
-        $mealRequest = MealRequest::create($request->all());
-
-        return response()->json($mealRequest, 201);
+    if ($validator->fails()) {
+        \Log::error('Validation errors', $validator->errors()->toArray());
+        return response()->json($validator->errors(), 400);
     }
+
+    // Filtra usuários com status de bolsista e role ALN
+    $bolsistas = User::where('bolsista', true)
+        ->where('role', 'ALN')
+        ->get();
+
+    \Log::info('Bolsistas found', $bolsistas->toArray());
+
+    foreach ($bolsistas as $bolsista) {
+        $existingRequest = MealRequest::where('user_id', $bolsista->id)
+            ->where('meal_id', $request->meal_id)
+            ->where('request_date', $request->request_date)
+            ->first();
+
+        if (!$existingRequest) {
+            \Log::info('Creating request for User ID: ' . $bolsista->id);
+            MealRequest::create([
+                'user_id' => $bolsista->id,
+                'meal_id' => $request->meal_id,
+                'request_date' => $request->request_date,
+                'quantity' => $request->quantity,
+            ]);
+        }
+    }
+
+    return response()->json(['message' => 'Meals scheduled for all scholarship students'], 201);
+}
+
 
     /**
      * Confirm the meal request by the user.
@@ -122,44 +145,44 @@ class MealRequestController extends Controller
     /**
      * Schedule meals for all scholarship students.
      */
-    public function schedule(){
-    // {
-    //     \Log::info('Request received for scheduling meals', $request->all());
+    public function scheduleForAllBolsistas(Request $request)
+    {
+        \Log::info('Request received for scheduling meals', $request->all());
 
-    //     $validator = Validator::make($request->all(), [
-    //         'meal_id' => 'required|exists:meals,id',
-    //         'request_date' => 'required|date',
-    //         'quantity' => 'required|integer|min:1',
-    //     ]);
+        $validator = Validator::make($request->all(), [
+            'meal_id' => 'required|exists:meals,id',
+            'request_date' => 'required|date',
+            'quantity' => 'required|integer|min:1',
+        ]);
 
-    //     if ($validator->fails()) {
-    //         \Log::error('Validation errors', $validator->errors()->toArray());
-    //         return response()->json($validator->errors(), 400);
-    //     }
+        if ($validator->fails()) {
+            \Log::error('Validation errors', $validator->errors()->toArray());
+            return response()->json($validator->errors(), 400);
+        }
 
-    //     $bolsistas = User::where('bolsista', true)
-    //         ->where('role', 'ALN')
-    //         ->get();
+        $bolsistas = User::where('bolsista', true)
+            ->where('role', 'ALN')
+            ->get();
 
-    //     \Log::info('Bolsistas found', $bolsistas->toArray());
+        \Log::info('Bolsistas found', $bolsistas->toArray());
 
-    //     foreach ($bolsistas as $bolsista) {
-    //         $existingRequest = MealRequest::where('user_id', $bolsista->id)
-    //             ->where('meal_id', $request->meal_id)
-    //             ->where('request_date', $request->request_date)
-    //             ->first();
+        foreach ($bolsistas as $bolsista) {
+            $existingRequest = MealRequest::where('user_id', $bolsista->id)
+                ->where('meal_id', $request->meal_id)
+                ->where('request_date', $request->request_date)
+                ->first();
 
-    //         if (!$existingRequest) {
-    //             \Log::info('Creating request for User ID: ' . $bolsista->id);
-    //             MealRequest::create([
-    //                 'user_id' => $bolsista->id,
-    //                 'meal_id' => $request->meal_id,
-    //                 'request_date' => $request->request_date,
-    //                 'quantity' => $request->quantity,
-    //             ]);
-    //         }
-    //     }
+            if (!$existingRequest) {
+                \Log::info('Creating request for User ID: ' . $bolsista->id);
+                MealRequest::create([
+                    'user_id' => $bolsista->id,
+                    'meal_id' => $request->meal_id,
+                    'request_date' => $request->request_date,
+                    'quantity' => $request->quantity,
+                ]);
+            }
+        }
 
-        return response()->json(['message' => 'Funcionando'], 201);
+        return response()->json(['message' => 'Meals scheduled for all scholarship students'], 201);
     }
 }
