@@ -93,6 +93,9 @@ const ListTable = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this student?")) {
       try {
+        // Verifique o cabeçalho antes da solicitação
+        console.log('Request headers before DELETE:', axios.defaults.headers.common);
+  
         await axios.delete(`/users/${id}`);
         setStudents((prev) => prev.filter((student) => student.id !== id));
         setFilteredStudents((prev) =>
@@ -105,6 +108,32 @@ const ListTable = () => {
       }
     }
   };
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      // Verifique o cabeçalho antes da solicitação
+      console.log('Request headers before PUT/POST:', axios.defaults.headers.common);
+  
+      if (editingStudent) {
+        const response = await axios.put(`/users/${formData.id}`, formData);
+        console.log(response);
+      } else {
+        const response = await axios.post("/users", formData);
+        console.log(response);
+      }
+      setShowModal(false);
+    } catch (error) {
+      if (error.response) {
+        console.error("Erro na solicitação:", error.response.data);
+        setError(error.response.data.message || "Erro ao salvar os dados");
+      } else {
+        console.error("Erro na solicitação:", error.message);
+        setError("Erro ao enviar a solicitação");
+      }
+    }
+  };
+  
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -114,29 +143,30 @@ const ListTable = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (editingStudent) {
-       
-        const response = await axios.put(`/users/${formData.id}`, formData);
-      } else {
-        
-        const response = await axios.post("/users", formData);
-      }
-      setShowModal(false);
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     if (editingStudent) {
+  //       console.log(axios)
+  //       const response = await axios.put(`/users/${formData.id}`, formData);
+  //       console.log(response)
+  //     } else {
+  //       const response = await axios.post("/users", formData);
+  //       console.log(response)
+  //     }
+  //     setShowModal(false);
      
-    } catch (error) {
-      if (error.response) {
-        console.error("Erro na solicitação:", error.response.data);
-        // Exibir mensagem de erro para o usuário
-        setError(error.response.data.message || "Erro ao salvar os dados");
-      } else {
-        console.error("Erro na solicitação:", error.message);
-        setError("Erro ao enviar a solicitação");
-      }
-    }
-  };
+  //   } catch (error) {
+  //     if (error.response) {
+  //       console.error("Erro na solicitação:", error.response.data);
+  //       // Exibir mensagem de erro para o usuário
+  //       setError(error.response.data.message || "Erro ao salvar os dados");
+  //     } else {
+  //       console.error("Erro na solicitação:", error.message);
+  //       setError("Erro ao enviar a solicitação");
+  //     }
+  //   }
+  // };
   
 
   const handleModalClose = () => {
