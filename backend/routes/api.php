@@ -10,7 +10,7 @@ use App\Http\Controllers\MealRequestController;
 // Rota de login sem middleware de autenticação
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-// // Rotas protegidas por autenticação Sanctum e com CORS configurado
+
 // Route::group(['middleware' => ['auth:sanctum', 'cors']], function () {
 
     Route::group(['prefix' => 'users'], function () {
@@ -47,8 +47,14 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
         Route::get('/{id}', [MealRequestController::class, 'show']);
         Route::put('/{id}', [MealRequestController::class, 'update']);
         Route::delete('/{id}', [MealRequestController::class, 'destroy']);
-    });
+        Route::post('/schedule', [MealRequestController::class, 'schedule']);
+        
 
+    });
+    Route::get('/test', function () {
+        return response()->json(['message' => 'Test route is working']);
+    });
+    
     Route::post('/logout/{id}', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/me', [AuthController::class, 'me']);

@@ -7,6 +7,7 @@ use App\Models\MealRequest;
 use App\Models\User;
 use App\Models\Meal;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class MealRequestController extends Controller
 {
@@ -40,9 +41,9 @@ class MealRequestController extends Controller
         return response()->json($mealRequest, 201);
     }
 
-
-    //Cofirmação pelo aluno da refeição - Bolsista
-
+    /**
+     * Confirm the meal request by the user.
+     */
     public function confirm($id)
     {
         $mealRequest = MealRequest::find($id);
@@ -51,12 +52,10 @@ class MealRequestController extends Controller
             return response()->json(['message' => 'Meal request not found'], 404);
         }
 
-        // Verificar se a hora atual é antes do prazo de confirmação (ex.: até as 11h do dia anterior)
         $confirmationDeadline = Carbon::now()->subDay()->hour(11)->minute(0)->second(0);
         $currentTime = Carbon::now();
 
         if ($currentTime->lte($confirmationDeadline)) {
-            // Atualizar o status da solicitação para "confirmado"
             $mealRequest->status = 'confirmed';
             $mealRequest->save();
 
@@ -65,8 +64,6 @@ class MealRequestController extends Controller
             return response()->json(['message' => 'Confirmation deadline has passed'], 400);
         }
     }
-
-
 
     /**
      * Display the specified meal request.
@@ -120,5 +117,49 @@ class MealRequestController extends Controller
         $mealRequest->delete();
 
         return response()->json(['message' => 'Meal request deleted successfully']);
+    }
+
+    /**
+     * Schedule meals for all scholarship students.
+     */
+    public function schedule(){
+    // {
+    //     \Log::info('Request received for scheduling meals', $request->all());
+
+    //     $validator = Validator::make($request->all(), [
+    //         'meal_id' => 'required|exists:meals,id',
+    //         'request_date' => 'required|date',
+    //         'quantity' => 'required|integer|min:1',
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         \Log::error('Validation errors', $validator->errors()->toArray());
+    //         return response()->json($validator->errors(), 400);
+    //     }
+
+    //     $bolsistas = User::where('bolsista', true)
+    //         ->where('role', 'ALN')
+    //         ->get();
+
+    //     \Log::info('Bolsistas found', $bolsistas->toArray());
+
+    //     foreach ($bolsistas as $bolsista) {
+    //         $existingRequest = MealRequest::where('user_id', $bolsista->id)
+    //             ->where('meal_id', $request->meal_id)
+    //             ->where('request_date', $request->request_date)
+    //             ->first();
+
+    //         if (!$existingRequest) {
+    //             \Log::info('Creating request for User ID: ' . $bolsista->id);
+    //             MealRequest::create([
+    //                 'user_id' => $bolsista->id,
+    //                 'meal_id' => $request->meal_id,
+    //                 'request_date' => $request->request_date,
+    //                 'quantity' => $request->quantity,
+    //             ]);
+    //         }
+    //     }
+
+        return response()->json(['message' => 'Funcionando'], 201);
     }
 }
