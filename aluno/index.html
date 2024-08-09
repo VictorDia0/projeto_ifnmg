@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar Solicitação de Refeição</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Minhas Solicitações de Refeição</h2>
+        <button class="open-modal-btn" onclick="openModal(1)">Abrir Solicitação 1</button>
+        <button class="open-modal-btn" onclick="openModal(2)">Abrir Solicitação 2</button>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2>Confirmar Solicitação de Refeição</h2>
+            <form id="mealRequestForm">
+                <label for="mealName">Refeição</label>
+                <input id="mealName" type="text" readonly />
+                
+                <label for="requestDate">Data da Solicitação</label>
+                <input id="requestDate" type="text" readonly />
+                
+                <button type="button" class="confirm-btn" onclick="handleConfirm()">Confirmar</button>
+                <button type="button" class="reject-btn" onclick="handleReject()">Rejeitar</button>
+            </form>
+            <p id="error" class="error"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -67,27 +67,46 @@ class MealRequestController extends Controller
     /**
      * Confirm the meal request by the user.
      */
+    // public function confirm($id)
+    // {
+    //     $mealRequest = MealRequest::find($id);
+
+    //     if (is_null($mealRequest)) {
+    //         return response()->json(['message' => 'Meal request not found'], 404);
+    //     }
+
+    //     $confirmationDeadline = Carbon::now()->subDay()->hour(0)->minute(0)->second(0);
+    //     $currentTime = Carbon::now();
+
+    //     if ($currentTime->lte($confirmationDeadline)) {
+    //         $mealRequest->status = 'confirmed';
+    //         $mealRequest->save();
+
+    //         return response()->json(['message' => 'Meal request confirmed successfully']);
+    //     } else {
+    //         return response()->json(['message' => 'Confirmation deadline has passed'], 400);
+    //     }
+    // }
+
     public function confirm($id)
     {
-        $mealRequest = MealRequest::find($id);
+        try {
+            $mealRequest = MealRequest::find($id);
 
-        if (is_null($mealRequest)) {
-            return response()->json(['message' => 'Meal request not found'], 404);
-        }
+            if (is_null($mealRequest)) {
+                return response()->json(['message' => 'Meal request not found'], 404);
+            }
 
-        $confirmationDeadline = Carbon::now()->subDay()->hour(11)->minute(0)->second(0);
-        $currentTime = Carbon::now();
-
-        if ($currentTime->lte($confirmationDeadline)) {
-            $mealRequest->status = 'confirmed';
+            // Atualiza o status da solicitação para 'confirmado'
+            $mealRequest->status = 'approved';
             $mealRequest->save();
 
             return response()->json(['message' => 'Meal request confirmed successfully']);
-        } else {
-            return response()->json(['message' => 'Confirmation deadline has passed'], 400);
+        } catch (\Exception $e) {
+            // Captura qualquer exceção e retorna um erro genérico
+            return response()->json(['message' => 'An error occurred'], 500);
         }
     }
-
     /**
      * Display the specified meal request.
      */

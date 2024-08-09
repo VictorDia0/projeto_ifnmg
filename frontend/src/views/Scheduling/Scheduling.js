@@ -104,7 +104,7 @@ const Scheduling = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "confirmed":
+      case "approved":
         return "green";
       case "pending":
         return "orange";
