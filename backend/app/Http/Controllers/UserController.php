@@ -12,9 +12,15 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
+        $role = $request->query('role');
+        if ($role) {
+            $users = User::where('role', $role)->get();
+        } else {
+            $users = User::all();
+        }
+
         return response()->json($users);
     }
 
