@@ -52,8 +52,8 @@ const ListTable = () => {
         setStudents(response.data);
         setFilteredStudents(response.data);
       } catch (error) {
-        console.error("Failed to fetch students", error);
-        setError("Failed to fetch students");
+        console.error("Falha ao lista os alunos", error);
+        setError("Falha ao lista os aluno");
       } finally {
         setLoading(false);
       }
@@ -91,7 +91,7 @@ const ListTable = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this student?")) {
+    if (window.confirm("Tem certeza que deseja apaga os dados do aluno?")) {
       try {
         // Verifique o cabeçalho antes da solicitação
         console.log('Request headers before DELETE:', axios.defaults.headers.common);
@@ -101,10 +101,10 @@ const ListTable = () => {
         setFilteredStudents((prev) =>
           prev.filter((student) => student.id !== id)
         );
-        setSuccessMessage("Student deleted successfully");
+        setSuccessMessage("Estudante deletado com sucesso");
       } catch (error) {
-        console.error("Failed to delete student", error);
-        setError("Failed to delete student");
+        console.error("Falha ao deletar estudante!", error);
+        setError("Falha ao deletar estudante!");
       }
     }
   };
@@ -112,27 +112,24 @@ const ListTable = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Verifique o cabeçalho antes da solicitação
-      console.log('Request headers before PUT/POST:', axios.defaults.headers.common);
-  
-      if (editingStudent) {
-        const response = await axios.put(`/users/${formData.id}`, formData);
-        console.log(response);
-      } else {
-        const response = await axios.post("/users", formData);
-        console.log(response);
-      }
+      const response = editingStudent
+        ? await axios.put(`/users/${formData.id}`, formData)
+        : await axios.post("/users", formData);
+      setSuccessMessage(
+        `Estudante ${editingStudent ? "alterado" : "adicionado"} com sucesso`
+      );
       setShowModal(false);
     } catch (error) {
       if (error.response) {
-        console.error("Erro na solicitação:", error.response.data);
-        setError(error.response.data.message || "Erro ao salvar os dados");
+        setError(error.response.data.message || "Ocorreu um erro");
+      } else if (error.request) {
+        setError("Nenhuma resposta recebida do servidor");
       } else {
-        console.error("Erro na solicitação:", error.message);
-        setError("Erro ao enviar a solicitação");
+        setError(`Erro na solicitação: ${error.message}`);
       }
     }
   };
+
   
 
   const handleInputChange = (e) => {
@@ -143,31 +140,7 @@ const ListTable = () => {
     }));
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     if (editingStudent) {
-  //       console.log(axios)
-  //       const response = await axios.put(`/users/${formData.id}`, formData);
-  //       console.log(response)
-  //     } else {
-  //       const response = await axios.post("/users", formData);
-  //       console.log(response)
-  //     }
-  //     setShowModal(false);
-     
-  //   } catch (error) {
-  //     if (error.response) {
-  //       console.error("Erro na solicitação:", error.response.data);
-  //       // Exibir mensagem de erro para o usuário
-  //       setError(error.response.data.message || "Erro ao salvar os dados");
-  //     } else {
-  //       console.error("Erro na solicitação:", error.message);
-  //       setError("Erro ao enviar a solicitação");
-  //     }
-  //   }
-  // };
-  
+ 
 
   const handleModalClose = () => {
     setShowModal(false);
